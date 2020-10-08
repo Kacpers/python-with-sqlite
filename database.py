@@ -20,15 +20,15 @@ class Database:
         self.connection.commit()
 
     def fetch_all(self, table, **conditions):
-        # "SELECT * FROM urls WHERE category=?", category
-        # "SELECT * FROM urls WHERE first_name=? AND last_name=?", (first_name, last_name)
         values = conditions.values()
-        return self.cursor.execute(
+        query = self.cursor.execute(
             f"SELECT * FROM {table} WHERE {' and '.join([f'{condition}=?' for condition in conditions])}",
             list(values),
         )
+        return query.fetchall()
 
     def fetch_distinct(self, table, column):
-        return self.cursor.execute(
+        query = self.cursor.execute(
             f'SELECT DISTINCT {column} FROM {table}'
         )
+        return query.fetchall()
